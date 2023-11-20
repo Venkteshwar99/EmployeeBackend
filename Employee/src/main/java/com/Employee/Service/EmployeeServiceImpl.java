@@ -4,6 +4,7 @@ import com.Employee.Dao.EmployeeDao;
 import com.Employee.Exception.EmployeeException;
 import com.Employee.Model.Employee;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -103,6 +104,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     } catch (Exception e) {
       throw new Exception("Error while retriving Employee by ID", e);
     }
+  }
+
+  /**
+   * getEmpByName method Retrieves an employee by their name.
+   *
+   * @param name
+   * @return The retrieved employee.
+   * @throws Exception
+   */
+  @Override
+  public Optional<Employee> getEmpByName(String name) {
+    return Optional.ofNullable(
+        dao.empName(name).orElseThrow(() -> new EmployeeException("Employee Not found")));
   }
 
   /**

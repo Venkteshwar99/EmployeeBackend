@@ -2,25 +2,31 @@ package com.Employee.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+@Schema(description = "Employee Model Information")
 @Entity
 @Table(name = "Employee_Details")
 public class Employee {
 
+  @Schema(accessMode = Schema.AccessMode.READ_ONLY, description = "Employee Id", example = "123")
   @Id
   @Column(name = "emp_Id", nullable = false, unique = true)
   private long empId;
 
+  @Schema(description = "Employee Name", example = "Rohit Sharma")
   @Column(name = "emp_Name", nullable = false)
   private String empName;
 
+  @Schema(description = "Employee Department", example = "DEV")
   @Column(name = "emp_Dept", nullable = false)
   private String empDept;
 
+  @Schema(description = "Employee Role", example = "Manager")
   @Column(name = "emp_Role", nullable = false)
   private String empRole;
 

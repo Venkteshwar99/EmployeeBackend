@@ -2,6 +2,7 @@ package com.Employee.Service;
 
 import com.Employee.Model.Employee;
 import java.util.List;
+import java.util.Optional;
 
 public interface EmployeeService {
 
@@ -14,4 +15,6 @@ public interface EmployeeService {
   public String deleteEmp(long id);
 
   public Object getEmpById(long id) throws Exception;
+
+  public Optional<Employee> getEmpByName(String name);
 }
