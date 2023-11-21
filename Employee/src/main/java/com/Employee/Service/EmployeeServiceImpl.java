@@ -6,6 +6,8 @@ import com.Employee.Model.Employee;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /** Service managing employee-related business logic. */
@@ -117,6 +119,23 @@ public class EmployeeServiceImpl implements EmployeeService {
   public Optional<Employee> getEmpByName(String name) {
     return Optional.ofNullable(
         dao.empName(name).orElseThrow(() -> new EmployeeException("Employee Not found")));
+  }
+
+  /**
+   * getPageDetails method retrieves employees with pagination.
+   *
+   * @param pageable
+   * @return The retrieved employees.
+   */
+  @Override
+  public Page<Employee> getPageDetails(Pageable p) {
+    Page<Employee> pages = dao.findAll(p);
+    System.out.println("Page Size:" + pages.getSize());
+    if (pages.getSize() <= 0) {
+      throw new EmployeeException("No result");
+    } else {
+      return pages;
+    }
   }
 
   /**

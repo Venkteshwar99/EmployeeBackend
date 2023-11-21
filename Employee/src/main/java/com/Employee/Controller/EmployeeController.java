@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -146,5 +148,22 @@ public class EmployeeController {
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
+  }
+
+  /**
+   * Retrieves employees with page.
+   *
+   * @return The retrieved employees with Pagination.
+   */
+  @Operation(
+      summary = "Fetch Employees By Pagitnation",
+      description = "Fetches Employees with Pagination")
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "successful operation")})
+  @GetMapping(path = "/page")
+  public ResponseEntity<Page<Employee>> getPageDetails(Pageable p) throws Exception {
+
+    Page<Employee> pages = employeeService.getPageDetails(p);
+
+    return ResponseEntity.ok(pages);
   }
 }
