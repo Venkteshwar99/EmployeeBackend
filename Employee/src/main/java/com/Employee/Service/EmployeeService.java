@@ -16,9 +16,11 @@ public interface EmployeeService {
 
   public String deleteEmp(long id);
 
-  public Object getEmpById(long id) throws Exception;
+  public Optional<Employee> getEmpById(long id) throws Exception;
 
   public Optional<Employee> getEmpByName(String name);
 
   public Page<Employee> getPageDetails(Pageable p);
+
+  public Employee setOrUpdateImageEmp(Employee employee);
 }

@@ -3,14 +3,17 @@ package com.Employee.Controller;
 import com.Employee.Model.Employee;
 import com.Employee.Service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Controller handling employee-related operations. This class defines REST endpoints for managing
@@ -160,10 +164,105 @@ public class EmployeeController {
       description = "Fetches Employees with Pagination")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "successful operation")})
   @GetMapping(path = "/page")
-  public ResponseEntity<Page<Employee>> getPageDetails(Pageable p) throws Exception {
+  public ResponseEntity<Page<Employee>> getPageDetails(@Schema(hidden = true) Pageable p)
+      throws Exception {
 
     Page<Employee> pages = employeeService.getPageDetails(p);
 
     return ResponseEntity.ok(pages);
+  }
+
+  /**
+   * Add or update an employee's photo.
+   *
+   * @param id The ID of the employee.
+   * @param file The photo file to upload.
+   * @return A ResponseEntity with a message indicating the result of the operation.
+   */
+  @Operation(
+      summary = "Add or update an employee's photo",
+      description = "Uploads Employee's Image")
+  @PostMapping(path = "/photo/{id}")
+  public ResponseEntity<String> uploadEmployeePhoto(
+      @PathVariable Long id, @RequestParam("file") MultipartFile file) throws Exception {
+    try {
+      Optional<Employee> optionalEmployee = employeeService.getEmpById(id);
+
+      if (optionalEmployee.isPresent()) {
+        Employee employee = optionalEmployee.get();
+        if (file != null && !file.isEmpty()) {
+          byte[] photoBytes = file.getBytes();
+          employee.setPhoto(photoBytes);
+          employeeService.setOrUpdateImageEmp(employee);
+          return ResponseEntity.ok("Photo uploaded successfully!");
+        } else {
+          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File is required");
+        }
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee not found with Id:" + id);
+      }
+    } catch (IOException e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading photo");
+    }
+  }
+
+  /**
+   * Get an employee's photo.
+   *
+   * @param id The ID of the employee.
+   * @return A ResponseEntity with the employee's photo as a byte array.
+   */
+  @Operation(summary = "Get an employee's photo")
+  @GetMapping("/photo/{id}")
+  public ResponseEntity<?> getEmployeePhoto(@PathVariable Long id) throws Exception {
+
+    try {
+      Optional<Employee> optionalEmployee = employeeService.getEmpById(id);
+      if (optionalEmployee.isPresent()) {
+        Employee employee = optionalEmployee.get();
+        byte[] photo = employee.getPhoto();
+        if (photo == null) {
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Photo Already Deleted");
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG); // media type based on image format
+        return new ResponseEntity<>(photo, headers, HttpStatus.OK);
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body("Employee Not found with Id: " + id);
+      }
+    } catch (IOException e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading photo");
+    }
+  }
+
+  /**
+   * Delete an employee's photo.
+   *
+   * @param id The ID of the employee.
+   * @return A ResponseEntity with a message indicating the result of the operation.
+   */
+  @DeleteMapping("/photo/{id}")
+  @Operation(summary = "Delete an employee's photo")
+  public ResponseEntity<String> deleteEmployeePhoto(@PathVariable Long id) throws Exception {
+    try {
+      Optional<Employee> optionalEmployee = employeeService.getEmpById(id);
+      if (optionalEmployee.isPresent()) {
+        Employee employee = optionalEmployee.get();
+
+        if (employee.getPhoto() == null) {
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Photo is Not Present");
+        }
+        employee.setPhoto(null);
+        employeeService.setOrUpdateImageEmp(employee);
+        return ResponseEntity.ok("Photo deleted successfully");
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body("Employee Not found with Id: " + id);
+      }
+    } catch (Exception e) {
+
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting photo");
+    }
   }
 }

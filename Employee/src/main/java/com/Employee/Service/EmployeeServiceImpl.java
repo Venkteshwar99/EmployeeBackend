@@ -100,7 +100,7 @@ public class EmployeeServiceImpl implements EmployeeService {
    * @return The retrieved employee.
    */
   @Override
-  public Object getEmpById(long id) throws Exception {
+  public Optional<Employee> getEmpById(long id) throws Exception {
     try {
       return dao.findById(id);
     } catch (Exception e) {
@@ -135,6 +135,15 @@ public class EmployeeServiceImpl implements EmployeeService {
       throw new EmployeeException("No result");
     } else {
       return pages;
+    }
+  }
+
+  @Override
+  public Employee setOrUpdateImageEmp(Employee employee) {
+    if (dao.existsById(employee.getEmpId())) {
+      return dao.save(employee);
+    } else {
+      throw EmployeeException.updateException(employee.getEmpId());
     }
   }
 
