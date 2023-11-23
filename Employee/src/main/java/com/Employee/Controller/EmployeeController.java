@@ -1,5 +1,7 @@
 package com.Employee.Controller;
 
+import com.Employee.Helper.ExcelGenerator;
+import com.Employee.Helper.PdfGenerator;
 import com.Employee.Model.Employee;
 import com.Employee.Service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -7,7 +9,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +77,7 @@ public class EmployeeController {
       produces = {MediaType.APPLICATION_JSON_VALUE})
   public ResponseEntity<Object> addEmp(@RequestBody Employee employee) {
     try {
+
       return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.addEmp(employee));
 
     } catch (Exception e) {
@@ -246,8 +252,10 @@ public class EmployeeController {
   @Operation(summary = "Delete an employee's photo")
   public ResponseEntity<String> deleteEmployeePhoto(@PathVariable Long id) throws Exception {
     try {
+
       Optional<Employee> optionalEmployee = employeeService.getEmpById(id);
       if (optionalEmployee.isPresent()) {
+
         Employee employee = optionalEmployee.get();
 
         if (employee.getPhoto() == null) {
@@ -265,4 +273,23 @@ public class EmployeeController {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting photo");
     }
   }
+
+  @GetMapping("/export-to-pdf")
+  public void generatePdfFile(HttpServletResponse response) throws Exception {
+
+    response.setContentType("application/pdf");
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
+    String currentDateTime = dateFormat.format(new Date());
+
+    String headerkey = "Content-Disposition";
+    String headervalue = "attachment; filename=Employee" + currentDateTime + ".pdf";
+
+    response.setHeader(headerkey, headervalue);
+    List<Employee> listofEmployees = employeeService.getAllEmp();
+    PdfGenerator generator = new PdfGenerator();
+
+    generator.generate(listofEmployees, response);
+  }
+
 }
