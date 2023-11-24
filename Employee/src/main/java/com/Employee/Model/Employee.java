@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import java.util.Arrays;
 
 @Schema(description = "Employee Model Information")
 @Entity
@@ -23,6 +24,10 @@ public class Employee {
   @Column(name = "emp_Name", nullable = false)
   private String empName;
 
+  @Schema(description = "Email", example = "rohit@gmail.com")
+  @Column(name = "email", nullable = false)
+  private String email;
+
   @Schema(description = "Department", example = "DEV")
   @Column(name = "emp_Dept", nullable = false)
   private String empDept;
@@ -35,6 +40,14 @@ public class Employee {
   @Column(name = "emp_image", length = 100000)
   @Lob
   private byte[] photo;
+
+  @Schema(description = "Active", example = "True")
+  @Column(name = "is_Active", nullable = false)
+  private boolean isActive;
+
+  @Schema(description = "Location", example = "Mumbai")
+  @Column(name = "location", nullable = false)
+  private String location;
 
   /**
    * @return the empId
@@ -64,6 +77,20 @@ public class Employee {
    */
   public void setEmpName(String empName) {
     this.empName = empName;
+  }
+
+  /**
+   * @return the email
+   */
+  public String getEmail() {
+    return email;
+  }
+
+  /**
+   * @param email the email to set
+   */
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   /**
@@ -109,20 +136,32 @@ public class Employee {
   }
 
   /**
-   * @param empId
-   * @param empName
-   * @param empDept
-   * @param empRole
+   * @return the isActive
    */
-  public Employee(long empId, String empName, String empDept, String empRole) {
-    super();
-    this.empId = empId;
-    this.empName = empName;
-    this.empDept = empDept;
-    this.empRole = empRole;
+  public boolean isActive() {
+    return isActive;
   }
 
-  public Employee() {}
+  /**
+   * @param isActive the isActive to set
+   */
+  public void setActive(boolean isActive) {
+    this.isActive = isActive;
+  }
+
+  /**
+   * @return the location
+   */
+  public String getLocation() {
+    return location;
+  }
+
+  /**
+   * @param location the location to set
+   */
+  public void setLocation(String location) {
+    this.location = location;
+  }
 
   @Override
   public String toString() {
@@ -130,10 +169,50 @@ public class Employee {
         + empId
         + ", empName="
         + empName
+        + ", email="
+        + email
         + ", empDept="
         + empDept
         + ", empRole="
         + empRole
+        + ", photo="
+        + Arrays.toString(photo)
+        + ", isActive="
+        + isActive
+        + ", location="
+        + location
         + "]";
   }
+
+  /**
+   * @param empId
+   * @param empName
+   * @param email
+   * @param empDept
+   * @param empRole
+   * @param photo
+   * @param isActive
+   * @param location
+   */
+  public Employee(
+      long empId,
+      String empName,
+      String email,
+      String empDept,
+      String empRole,
+      byte[] photo,
+      boolean isActive,
+      String location) {
+    super();
+    this.empId = empId;
+    this.empName = empName;
+    this.email = email;
+    this.empDept = empDept;
+    this.empRole = empRole;
+    this.photo = photo;
+    this.isActive = isActive;
+    this.location = location;
+  }
+
+  public Employee() {}
 }

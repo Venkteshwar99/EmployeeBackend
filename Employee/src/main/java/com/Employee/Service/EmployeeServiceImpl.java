@@ -47,6 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     if (!dao.existsById(employee.getEmpId())) {
       employee.setEmpId(generateUniqueID());
+
       return dao.save(employee);
 
     } else {
