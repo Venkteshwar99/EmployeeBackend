@@ -23,4 +23,10 @@ public interface EmployeeService {
   public Page<Employee> getPageDetails(Pageable p);
 
   public Employee setOrUpdateImageEmp(Employee employee);
+
+  public boolean softDeleteEmployee(long id) throws Exception;
+
+  Optional<Employee> getActiveEmpById(long id) throws Exception;
+
+  public List<Employee> getAllActiveEmp() throws Exception;
 }

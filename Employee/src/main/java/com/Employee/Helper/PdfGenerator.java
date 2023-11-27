@@ -43,22 +43,34 @@ public class PdfGenerator {
     cell.setPadding(5);
 
     Font font = FontFactory.getFont(FontFactory.COURIER);
-    font.setColor(CMYKColor.WHITE);
+    font.setColor(CMYKColor.BLACK);
 
     cell.setPhrase(new Phrase("ID", font));
     table.addCell(cell);
     cell.setPhrase(new Phrase("Name", font));
     table.addCell(cell);
+    cell.setPhrase(new Phrase("Email", font));
+    table.addCell(cell);
     cell.setPhrase(new Phrase("Department", font));
     table.addCell(cell);
     cell.setPhrase(new Phrase("Role", font));
+    table.addCell(cell);
+    cell.setPhrase(new Phrase("Location", font));
+    table.addCell(cell);
+    cell.setPhrase(new Phrase("Active", font));
+    table.addCell(cell);
+    cell.setPhrase(new Phrase("Photo", font));
     table.addCell(cell);
 
     for (Employee emp : employeeList) {
       table.addCell(String.valueOf(emp.getEmpId()));
       table.addCell(emp.getEmpName());
+      table.addCell(emp.getEmail());
       table.addCell(emp.getEmpDept());
       table.addCell(emp.getEmpRole());
+      table.addCell(emp.getLocation());
+      table.addCell(String.valueOf(emp.isActive()));
+      table.addCell(String.valueOf(emp.getPhoto()));
     }
 
     document.add(table);

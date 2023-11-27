@@ -54,12 +54,28 @@ public class EmployeeController {
    * @return A list of employees.
    */
   @Operation(
-      summary = "Fetch all Employees",
-      description = "Fetches all Employee entities and their data from data source")
+      summary = "Fetch all Active & InActive Employees",
+      description =
+          "Fetches all Active & InActive Employee entities and their data from data source")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "successful operation")})
   @GetMapping(path = "/findAll")
   public ResponseEntity<List<Employee>> getAllEmp() throws Exception {
     List<Employee> list = employeeService.getAllEmp();
+    return ResponseEntity.ok(list);
+  }
+
+  /**
+   * Retrieves a list of all employees.
+   *
+   * @return A list of employees.
+   */
+  @Operation(
+      summary = "Fetch all Active Employees",
+      description = "Fetches all Active Employee entities and their data from data source")
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "successful operation")})
+  @GetMapping(path = "/findAllActive")
+  public ResponseEntity<List<Employee>> getAllActiveEmp() throws Exception {
+    List<Employee> list = employeeService.getAllActiveEmp();
     return ResponseEntity.ok(list);
   }
 
@@ -119,6 +135,44 @@ public class EmployeeController {
   public ResponseEntity<String> deletEmp(@PathVariable("id") long id) {
     try {
       return ResponseEntity.status(HttpStatus.OK).body(employeeService.deleteEmp(id));
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+  }
+
+  /**
+   * Soft Deletes an employee by their ID.
+   *
+   * @param id The ID of the employee to be deleted.
+   * @return True response.
+   */
+  @Operation(
+      summary = "Soft Delete a Employee by ID",
+      description = "Soft Delete a Employee object by specifying its ID.")
+  @DeleteMapping(path = "/deleteActive/{id}")
+  public ResponseEntity<String> softDeleteEmp(@PathVariable("id") long id) {
+    try {
+      boolean emp = employeeService.softDeleteEmployee(id);
+      return ResponseEntity.status(HttpStatus.OK)
+          .body(emp + " Employee Soft Deleted Successfully: " + id);
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+  }
+
+  /**
+   * Retrieves an Active employee by their ID.
+   *
+   * @param id The ID of the employee to retrieve.
+   * @return The retrieved employee.
+   */
+  @Operation(
+      summary = "Retrieve a Active Employee by ID",
+      description = "Get a Active Employee object by specifying its ID.")
+  @GetMapping(path = "/getActiveEmp/{id}")
+  public ResponseEntity<Object> getActiveEmpById(@PathVariable("id") long id) {
+    try {
+      return ResponseEntity.status(HttpStatus.OK).body(employeeService.getActiveEmpById(id));
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
@@ -226,8 +280,9 @@ public class EmployeeController {
       if (optionalEmployee.isPresent()) {
         Employee employee = optionalEmployee.get();
         byte[] photo = employee.getPhoto();
+        System.out.println("GettingPhoto:----->" + photo);
         if (photo == null) {
-          return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Photo Already Deleted");
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Photo Not Present or is Deleted");
         }
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG); // media type based on image format

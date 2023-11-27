@@ -1,9 +1,11 @@
 package com.Employee.Dao;
 
 import com.Employee.Model.Employee;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /** Repository interface for accessing Employee related data. */
 public interface EmployeeDao extends JpaRepository<Employee, Long> {
@@ -19,4 +21,11 @@ public interface EmployeeDao extends JpaRepository<Employee, Long> {
   Long findMaxEmployeeId();
 
   Optional<Employee> empName(String name);
+
+  @Query(
+      value = "SELECT * FROM Employee_Details e WHERE e.emp_Id = :id AND e.is_Active = true",
+      nativeQuery = true)
+  Optional<Employee> findByIdAndIsActiveTrue(@Param("id") long id);
+
+  List<Employee> findAllByIsActiveTrue();
 }
