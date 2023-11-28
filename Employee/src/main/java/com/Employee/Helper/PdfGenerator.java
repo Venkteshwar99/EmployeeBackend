@@ -5,6 +5,7 @@ import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Font;
 import com.lowagie.text.FontFactory;
+import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
@@ -32,10 +33,10 @@ public class PdfGenerator {
     paragraph1.setAlignment(Paragraph.ALIGN_CENTER);
     document.add(paragraph1);
 
-    PdfPTable table = new PdfPTable(4);
+    PdfPTable table = new PdfPTable(8);
     table.setWidthPercentage(100f);
 
-    table.setWidths(new int[] {3, 3, 3, 3});
+    table.setWidths(new int[] {3, 3, 3, 3, 3, 3, 3, 3});
     table.setSpacingBefore(5);
 
     PdfPCell cell = new PdfPCell();
@@ -70,9 +71,23 @@ public class PdfGenerator {
       table.addCell(emp.getEmpRole());
       table.addCell(emp.getLocation());
       table.addCell(String.valueOf(emp.isActive()));
-      table.addCell(String.valueOf(emp.getPhoto()));
-    }
+      try {
+        byte[] photo = emp.getPhoto();
+        if (photo != null && photo.length > 0) {
+          Image img = Image.getInstance(photo);
+          img.scaleAbsolute(60f, 30f);
+          PdfPCell pCell = new PdfPCell(img);
+          table.addCell(pCell);
+        } else {
+          PdfPCell emptyPhotoCell = new PdfPCell();
+          table.addCell(emptyPhotoCell);
+        }
 
+      } catch (IOException | RuntimeException e) {
+        e.printStackTrace();
+        System.out.println("Erooroooror:" + e.getMessage());
+      }
+    }
     document.add(table);
     document.close();
   }

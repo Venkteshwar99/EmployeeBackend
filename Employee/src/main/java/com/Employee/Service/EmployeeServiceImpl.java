@@ -161,12 +161,9 @@ public class EmployeeServiceImpl implements EmployeeService {
   @Override
   public Optional<Employee> getEmpById(long id) throws Exception {
     try {
-
       return Optional.ofNullable(
           dao.findById(id).orElseThrow(() -> new EmployeeException("Employee Id not found")));
-
     } catch (Exception e) {
-
       throw new Exception("Error while retriving Employee by ID", e);
     }
   }

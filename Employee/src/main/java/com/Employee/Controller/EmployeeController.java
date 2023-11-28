@@ -282,7 +282,8 @@ public class EmployeeController {
         byte[] photo = employee.getPhoto();
         System.out.println("GettingPhoto:----->" + photo);
         if (photo == null) {
-          return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Photo Not Present or is Deleted");
+          return ResponseEntity.status(HttpStatus.NOT_FOUND)
+              .body("Photo Not Present or is Deleted");
         }
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG); // media type based on image format
@@ -328,6 +329,12 @@ public class EmployeeController {
     }
   }
 
+  /**
+   * Generates an Pdf file.
+   *
+   * @param HttpServletResponse.
+   * @return A ResponseEntity with a Pdf file indicating the result of the operation.
+   */
   @GetMapping("/export-to-pdf")
   public void generatePdfFile(HttpServletResponse response) throws Exception {
 
