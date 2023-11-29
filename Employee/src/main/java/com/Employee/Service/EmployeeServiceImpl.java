@@ -3,6 +3,8 @@ package com.Employee.Service;
 import com.Employee.Dao.EmployeeDao;
 import com.Employee.Exception.EmployeeException;
 import com.Employee.Model.Employee;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +69,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     if (!dao.existsById(employee.getEmpId())) {
       employee.setEmpId(generateUniqueID());
+      employee.setCreated(LocalDateTime.now());
+      employee.setUpdated(LocalDateTime.now());
 
       return dao.save(employee);
 
@@ -87,12 +91,16 @@ public class EmployeeServiceImpl implements EmployeeService {
       Employee employee =
           dao.findById(id).orElseThrow(() -> EmployeeException.notFoundException(id));
 
-      employee.setEmpName(updatedEmployee.getEmpName());
+      employee.setFullName(updatedEmployee.getFullName());
       employee.setEmpDept(updatedEmployee.getEmpDept());
       employee.setEmpRole(updatedEmployee.getEmpRole());
       employee.setActive(updatedEmployee.isActive());
       employee.setEmail(updatedEmployee.getEmail());
       employee.setLocation(updatedEmployee.getLocation());
+      if(employee.getCreated()==null) {
+      employee.setCreated(LocalDateTime.now());
+      }
+      employee.setUpdated(LocalDateTime.now());
 
       return dao.save(employee);
     } catch (Exception e) {

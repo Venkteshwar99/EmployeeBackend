@@ -21,6 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +37,7 @@ import org.springframework.web.multipart.MultipartFile;
  * Controller handling employee-related operations. This class defines REST endpoints for managing
  * employee informations.
  */
+@CrossOrigin("*")
 @Tag(name = "Employee Controller", description = "Employee Management API's")
 @RestController
 @RequestMapping(path = "/api")
@@ -293,7 +295,7 @@ public class EmployeeController {
             .body("Employee Not found with Id: " + id);
       }
     } catch (IOException e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading photo");
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting photo");
     }
   }
 

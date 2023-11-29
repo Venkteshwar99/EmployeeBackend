@@ -21,6 +21,9 @@ public interface EmployeeDao extends JpaRepository<Employee, Long> {
   Long findMaxEmployeeId();
 
   Optional<Employee> empName(String name);
+  
+//  @Query(value="SELECT * FROM Employee_Details e WHERE BINARY e.first_Name LIKE :name%", nativeQuery=true)
+//  Optional<Employee> empName(@Param("name") String name);
 
   @Query(
       value = "SELECT * FROM Employee_Details e WHERE e.emp_Id = :id AND e.is_Active = true",

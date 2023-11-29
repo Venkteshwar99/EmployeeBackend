@@ -65,7 +65,7 @@ public class PdfGenerator {
 
     for (Employee emp : employeeList) {
       table.addCell(String.valueOf(emp.getEmpId()));
-      table.addCell(emp.getEmpName());
+      table.addCell(emp.getFullName());
       table.addCell(emp.getEmail());
       table.addCell(emp.getEmpDept());
       table.addCell(emp.getEmpRole());
@@ -73,16 +73,19 @@ public class PdfGenerator {
       table.addCell(String.valueOf(emp.isActive()));
       try {
         byte[] photo = emp.getPhoto();
+        PdfPCell pCell = new PdfPCell();
         if (photo != null && photo.length > 0) {
           Image img = Image.getInstance(photo);
-          img.scaleAbsolute(60f, 30f);
-          PdfPCell pCell = new PdfPCell(img);
-          table.addCell(pCell);
-        } else {
+          
+          float maxSize =50f;
+          img.scaleToFit(maxSize, maxSize);
+          pCell.addElement(img);
+        } 
+        else {
           PdfPCell emptyPhotoCell = new PdfPCell();
           table.addCell(emptyPhotoCell);
         }
-
+        table.addCell(pCell);
       } catch (IOException | RuntimeException e) {
         e.printStackTrace();
         System.out.println("Erooroooror:" + e.getMessage());
