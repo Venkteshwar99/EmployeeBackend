@@ -8,8 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
@@ -26,11 +24,11 @@ public class Employee {
   @Schema(description = "First Name", example = "Rohit")
   @Column(name = "first_Name", nullable = false)
   private String firstName;
-  
+
   @Schema(description = "Last Name", example = "Sharma")
   @Column(name = "last_Name", nullable = false)
   private String lastName;
-  
+
   @Schema(description = "Full Name", example = "Sharma, Rohit")
   @Column(name = "full_Name", nullable = false)
   private String fullName;
@@ -59,11 +57,11 @@ public class Employee {
   @Schema(description = "Location", example = "Mumbai")
   @Column(name = "location", nullable = false)
   private String location;
-  
+
   @Schema(description = "Created", example = "166000201")
   @Column(name = "created", nullable = false)
   private LocalDateTime created;
-  
+
   @Schema(description = "Updated", example = "166000201")
   @Column(name = "updated", nullable = false)
   private LocalDateTime updated;
@@ -85,48 +83,48 @@ public class Employee {
   }
 
   /**
- * @return the firstName
- */
-public String getFirstName() {
-	return firstName;
-}
+   * @return the firstName
+   */
+  public String getFirstName() {
+    return firstName;
+  }
 
-/**
- * @param firstName the firstName to set
- */
-public void setFirstName(String firstName) {
-	this.firstName = firstName;
-}
+  /**
+   * @param firstName the firstName to set
+   */
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
 
-/**
- * @return the lastName
- */
-public String getLastName() {
-	return lastName;
-}
+  /**
+   * @return the lastName
+   */
+  public String getLastName() {
+    return lastName;
+  }
 
-/**
- * @param lastName the lastName to set
- */
-public void setLastName(String lastName) {
-	this.lastName = lastName;
-}
+  /**
+   * @param lastName the lastName to set
+   */
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
 
-/**
- * @return the fullName
- */
-public String getFullName() {
-	return fullName;
-}
+  /**
+   * @return the fullName
+   */
+  public String getFullName() {
+    return fullName;
+  }
 
-/**
- * @param fullName the fullName to set
- */
-public void setFullName(String fullName) {
-	this.fullName = generateFullName();
-}
+  /**
+   * @param fullName the fullName to set
+   */
+  public void setFullName(String fullName) {
+    this.fullName = generateFullName();
+  }
 
-/**
+  /**
    * @return the email
    */
   public String getEmail() {
@@ -211,77 +209,107 @@ public void setFullName(String fullName) {
   }
 
   /**
- * @return the created
- */
-public LocalDateTime getCreated() {
-	return created;
-}
+   * @return the created
+   */
+  public LocalDateTime getCreated() {
+    return created;
+  }
 
-/**
- * @param created the created to set
- */
-public void setCreated(LocalDateTime created) {
-	this.created = created;
-}
+  /**
+   * @param created the created to set
+   */
+  public void setCreated(LocalDateTime created) {
+    this.created = created;
+  }
 
-/**
- * @return the updated
- */
-public LocalDateTime getUpdated() {
-	return updated;
-}
+  /**
+   * @return the updated
+   */
+  public LocalDateTime getUpdated() {
+    return updated;
+  }
 
-/**
- * @param updated the updated to set
- */
-public void setUpdated(LocalDateTime updated) {
-	this.updated = updated;
-}
+  /**
+   * @param updated the updated to set
+   */
+  public void setUpdated(LocalDateTime updated) {
+    this.updated = updated;
+  }
 
+  @Override
+  public String toString() {
+    return "Employee [empId="
+        + empId
+        + ", firstName="
+        + firstName
+        + ", lastName="
+        + lastName
+        + ", fullName="
+        + fullName
+        + ", email="
+        + email
+        + ", empDept="
+        + empDept
+        + ", empRole="
+        + empRole
+        + ", photo="
+        + Arrays.toString(photo)
+        + ", isActive="
+        + isActive
+        + ", location="
+        + location
+        + ", created="
+        + created
+        + ", updated="
+        + updated
+        + "]";
+  }
 
-@Override
-public String toString() {
-	return "Employee [empId=" + empId + ", firstName=" + firstName + ", lastName=" + lastName + ", fullName=" + fullName
-			+ ", email=" + email + ", empDept=" + empDept + ", empRole=" + empRole + ", photo=" + Arrays.toString(photo)
-			+ ", isActive=" + isActive + ", location=" + location + ", created=" + created + ", updated=" + updated
-			+ "]";
-}
+  /**
+   * @param empId
+   * @param firstName
+   * @param lastName
+   * @param fullName
+   * @param email
+   * @param empDept
+   * @param empRole
+   * @param photo
+   * @param isActive
+   * @param location
+   * @param created
+   * @param updated
+   */
+  public Employee(
+      long empId,
+      String firstName,
+      String lastName,
+      String fullName,
+      String email,
+      String empDept,
+      String empRole,
+      byte[] photo,
+      boolean isActive,
+      String location,
+      LocalDateTime created,
+      LocalDateTime updated) {
+    super();
+    this.empId = empId;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.fullName = generateFullName();
+    this.email = email;
+    this.empDept = empDept;
+    this.empRole = empRole;
+    this.photo = photo;
+    this.isActive = isActive;
+    this.location = location;
+    this.created = created;
+    this.updated = updated;
+  }
 
+  private String generateFullName() {
+    return lastName + ", " + firstName;
+  }
 
-/**
- * @param empId
- * @param firstName
- * @param lastName
- * @param fullName
- * @param email
- * @param empDept
- * @param empRole
- * @param photo
- * @param isActive
- * @param location
- * @param created
- * @param updated
- */
-public Employee(long empId, String firstName, String lastName, String fullName, String email, String empDept,
-		String empRole, byte[] photo, boolean isActive, String location, LocalDateTime created, LocalDateTime updated) {
-	super();
-	this.empId = empId;
-	this.firstName = firstName;
-	this.lastName = lastName;
-	this.fullName = generateFullName();
-	this.email = email;
-	this.empDept = empDept;
-	this.empRole = empRole;
-	this.photo = photo;
-	this.isActive = isActive;
-	this.location = location;
-	this.created = created;
-	this.updated = updated;
-}
-
-private String generateFullName() {
-	return lastName+", "+firstName;
-}
-
-public Employee() {}
+  public Employee() {}
 }

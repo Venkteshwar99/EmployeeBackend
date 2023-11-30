@@ -1,9 +1,8 @@
 package com.Employee.Service;
 
-import com.Employee.Dao.EmployeeDao;
 import com.Employee.Exception.EmployeeException;
 import com.Employee.Model.Employee;
-
+import com.Employee.Repository.EmployeeDao;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -97,8 +96,8 @@ public class EmployeeServiceImpl implements EmployeeService {
       employee.setActive(updatedEmployee.isActive());
       employee.setEmail(updatedEmployee.getEmail());
       employee.setLocation(updatedEmployee.getLocation());
-      if(employee.getCreated()==null) {
-      employee.setCreated(LocalDateTime.now());
+      if (employee.getCreated() == null) {
+        employee.setCreated(LocalDateTime.now());
       }
       employee.setUpdated(LocalDateTime.now());
 
@@ -184,9 +183,20 @@ public class EmployeeServiceImpl implements EmployeeService {
    * @throws Exception
    */
   @Override
-  public Optional<Employee> getEmpByName(String name) {
-    return Optional.ofNullable(
-        dao.empName(name).orElseThrow(() -> new EmployeeException("Employee Not found")));
+  public Optional<Employee> getEmpByName(String name) throws Exception {
+    try {
+      Optional<Employee> op = dao.empName(name);
+
+      if (op.isPresent()) {
+        return op;
+      } else {
+        throw new EmployeeException("Error");
+      }
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      throw new Exception(
+          "Employee Not found with name: " + name, EmployeeException.NoContentException());
+    }
   }
 
   /**

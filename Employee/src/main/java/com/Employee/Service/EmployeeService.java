@@ -18,7 +18,7 @@ public interface EmployeeService {
 
   public Optional<Employee> getEmpById(long id) throws Exception;
 
-  public Optional<Employee> getEmpByName(String name);
+  public Optional<Employee> getEmpByName(String name) throws Exception;
 
   public Page<Employee> getPageDetails(Pageable p);
 

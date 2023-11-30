@@ -76,12 +76,11 @@ public class PdfGenerator {
         PdfPCell pCell = new PdfPCell();
         if (photo != null && photo.length > 0) {
           Image img = Image.getInstance(photo);
-          
-          float maxSize =50f;
+
+          float maxSize = 50f;
           img.scaleToFit(maxSize, maxSize);
           pCell.addElement(img);
-        } 
-        else {
+        } else {
           PdfPCell emptyPhotoCell = new PdfPCell();
           table.addCell(emptyPhotoCell);
         }
