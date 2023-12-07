@@ -23,7 +23,7 @@ public interface EmployeeDao extends JpaRepository<Employee, Long> {
   // Optional<Employee> empName(String name);
 
   @Query(
-      value = "SELECT * FROM Employee_Details e WHERE BINARY e.first_Name LIKE :name%",
+      value = "SELECT * FROM Employee_Details e WHERE e.full_Name LIKE %:name%",
       nativeQuery = true)
   Optional<Employee> empName(@Param("name") String name);
 

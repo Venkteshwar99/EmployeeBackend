@@ -120,7 +120,7 @@ public class Employee {
   /**
    * @param fullName the fullName to set
    */
-  public void setFullName(String fullName) {
+  public void setFullName() {
     this.fullName = generateFullName();
   }
 

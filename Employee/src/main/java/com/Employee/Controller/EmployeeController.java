@@ -225,7 +225,7 @@ public class EmployeeController {
       description = "Fetches Employees with Pagination")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "successful operation")})
   @GetMapping(path = "/page")
-  public ResponseEntity<Page<Employee>> getPageDetails(@Schema(hidden = true) Pageable p)
+  public ResponseEntity<Page<Employee>> getPageDetails(Pageable p)
       throws Exception {
 
     Page<Employee> pages = employeeService.getPageDetails(p);

@@ -68,6 +68,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     if (!dao.existsById(employee.getEmpId())) {
       employee.setEmpId(generateUniqueID());
+      employee.setFullName();
+      employee.setActive(true);
       employee.setCreated(LocalDateTime.now());
       employee.setUpdated(LocalDateTime.now());
 
@@ -90,7 +92,7 @@ public class EmployeeServiceImpl implements EmployeeService {
       Employee employee =
           dao.findById(id).orElseThrow(() -> EmployeeException.notFoundException(id));
 
-      employee.setFullName(updatedEmployee.getFullName());
+      employee.setFullName();
       employee.setEmpDept(updatedEmployee.getEmpDept());
       employee.setEmpRole(updatedEmployee.getEmpRole());
       employee.setActive(updatedEmployee.isActive());
