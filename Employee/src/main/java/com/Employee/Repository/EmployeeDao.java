@@ -25,7 +25,7 @@ public interface EmployeeDao extends JpaRepository<Employee, Long> {
   @Query(
       value = "SELECT * FROM Employee_Details e WHERE e.full_Name LIKE %:name%",
       nativeQuery = true)
-  Optional<Employee> empName(@Param("name") String name);
+ Optional<List<Employee>> empName(@Param("name") String name);
 
   @Query(
       value = "SELECT * FROM Employee_Details e WHERE e.emp_Id = :id AND e.is_Active = true",

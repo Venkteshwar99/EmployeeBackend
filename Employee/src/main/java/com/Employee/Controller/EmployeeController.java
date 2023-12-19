@@ -208,7 +208,7 @@ public class EmployeeController {
   @GetMapping(path = "/getEmp/name")
   public ResponseEntity<?> getEmpByName(@RequestParam("name") String name) {
     try {
-      Optional<Employee> empByName = employeeService.getEmpByName(name);
+      Optional<List<Employee>> empByName = employeeService.getEmpByName(name);
       return ResponseEntity.status(HttpStatus.OK).body(empByName);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

@@ -185,9 +185,9 @@ public class EmployeeServiceImpl implements EmployeeService {
    * @throws Exception
    */
   @Override
-  public Optional<Employee> getEmpByName(String name) throws Exception {
+  public Optional<List<Employee>> getEmpByName(String name) throws Exception {
     try {
-      Optional<Employee> op = dao.empName(name);
+      Optional<List<Employee>> op = dao.empName(name);
 
       if (op.isPresent()) {
         return op;
