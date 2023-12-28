@@ -188,7 +188,6 @@ public class EmployeeServiceImpl implements EmployeeService {
   public Optional<List<Employee>> getEmpByName(String name) throws Exception {
     try {
       Optional<List<Employee>> op = dao.empName(name);
-
       if (op.isPresent()) {
         return op;
       } else {

@@ -20,12 +20,20 @@ public interface EmployeeDao extends JpaRepository<Employee, Long> {
   @Query(value = "SELECT MAX(e.emp_Id) From Employee_Details e", nativeQuery = true)
   Long findMaxEmployeeId();
 
-  // Optional<Employee> empName(String name);
+  //  @Query(
+  //      value = "SELECT * FROM Employee_Details e WHERE e.full_Name LIKE %:name%",
+  //      nativeQuery = true)
 
   @Query(
-      value = "SELECT * FROM Employee_Details e WHERE e.full_Name LIKE %:name%",
+      value =
+          "SELECT * FROM Employee_Details e WHERE "
+              + "e.emp_Id LIKE %:name% OR "
+              + "e.full_Name LIKE %:name% OR "
+              + "e.location LIKE %:name% OR "
+              + "e.emp_Dept LIKE %:name% OR"
+              + "e.emp_Role LIKE %:name% ",
       nativeQuery = true)
- Optional<List<Employee>> empName(@Param("name") String name);
+  Optional<List<Employee>> empName(@Param("name") String name);
 
   @Query(
       value = "SELECT * FROM Employee_Details e WHERE e.emp_Id = :id AND e.is_Active = true",

@@ -4,7 +4,6 @@ import com.Employee.Helper.PdfGenerator;
 import com.Employee.Model.Employee;
 import com.Employee.Service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -225,8 +224,7 @@ public class EmployeeController {
       description = "Fetches Employees with Pagination")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "successful operation")})
   @GetMapping(path = "/page")
-  public ResponseEntity<Page<Employee>> getPageDetails(Pageable p)
-      throws Exception {
+  public ResponseEntity<Page<Employee>> getPageDetails(Pageable p) throws Exception {
 
     Page<Employee> pages = employeeService.getPageDetails(p);
 
