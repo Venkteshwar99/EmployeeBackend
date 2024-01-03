@@ -280,7 +280,7 @@ public class EmployeeController {
       if (optionalEmployee.isPresent()) {
         Employee employee = optionalEmployee.get();
         byte[] photo = employee.getPhoto();
-        System.out.println("GettingPhoto:----->" + photo);
+//        System.out.println("GettingPhoto:----->" + photo);
         if (photo == null) {
           return ResponseEntity.status(HttpStatus.NOT_FOUND)
               .body("Photo Not Present or is Deleted");

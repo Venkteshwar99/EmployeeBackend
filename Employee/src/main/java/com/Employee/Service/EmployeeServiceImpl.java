@@ -92,7 +92,10 @@ public class EmployeeServiceImpl implements EmployeeService {
       Employee employee =
           dao.findById(id).orElseThrow(() -> EmployeeException.notFoundException(id));
 
+      employee.setFirstName(updatedEmployee.getFirstName());
+      employee.setLastName(updatedEmployee.getLastName());
       employee.setFullName();
+      
       employee.setEmpDept(updatedEmployee.getEmpDept());
       employee.setEmpRole(updatedEmployee.getEmpRole());
       employee.setActive(updatedEmployee.isActive());
