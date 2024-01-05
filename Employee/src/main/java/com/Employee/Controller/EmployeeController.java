@@ -41,7 +41,7 @@ import org.springframework.web.multipart.MultipartFile;
 @CrossOrigin("*")
 @Tag(name = "Employee Controller", description = "Employee Management API's")
 @RestController
-@RequestMapping(path = "/api")
+@RequestMapping(path = "/api/emp")
 public class EmployeeController {
 
   @Autowired EmployeeService employeeService;

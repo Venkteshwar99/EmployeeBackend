@@ -94,3 +94,10 @@ Employee/bin/main/com/Employee/Service/EmployeeService.class
 Employee/bin/main/com/Employee/Dao/EmployeeDao.class
 Employee/bin/main/com/Employee/Controller/EmployeeController.class
 Employee/bin/main/application.properties
+Employee/bin/main/application.properties
+Employee/bin/main/com/Employee/Controller/EmployeeController.class
+Employee/bin/main/com/Employee/Model/Employee.class
+Employee/bin/main/com/Employee/Dao/EmployeeDao.class
+Employee/bin/main/com/Employee/Service/EmployeeServiceImpl.class
+Employee/bin/main/com/Employee/Service/EmployeeService.class
+Employee/bin/test/com/Employee/EmployeeApplicationTests.class
