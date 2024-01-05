@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -280,7 +282,7 @@ public class EmployeeController {
       if (optionalEmployee.isPresent()) {
         Employee employee = optionalEmployee.get();
         byte[] photo = employee.getPhoto();
-//        System.out.println("GettingPhoto:----->" + photo);
+        //        System.out.println("GettingPhoto:----->" + photo);
         if (photo == null) {
           return ResponseEntity.status(HttpStatus.NOT_FOUND)
               .body("Photo Not Present or is Deleted");
@@ -351,5 +353,25 @@ public class EmployeeController {
     PdfGenerator generator = new PdfGenerator();
 
     generator.generate(listofEmployees, response);
+  }
+
+  @PatchMapping("/update-status/{id}")
+  public ResponseEntity<Boolean> updateEmployeeStatus(
+      @PathVariable Long id, @RequestBody Map<String, Boolean> status) throws Exception {
+
+    Optional<Employee> optionalEmployee =
+        employeeService.getAllEmp().stream()
+            .filter(employee -> employee.getEmpId() == id)
+            .findFirst();
+
+    if (optionalEmployee.isPresent()) {
+      Employee employee = optionalEmployee.get();
+      employee.setActive(status.get("active"));
+      employeeService.setOrUpdateImageEmp(employee);
+      return ResponseEntity.status(HttpStatus.OK)
+          .body(employeeService.getEmpById(id).get().isActive());
+    } else {
+      return ResponseEntity.notFound().build();
+    }
   }
 }
