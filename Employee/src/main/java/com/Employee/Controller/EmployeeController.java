@@ -1,7 +1,9 @@
 package com.Employee.Controller;
 
 import com.Employee.Helper.PdfGenerator;
+import com.Employee.Model.Email;
 import com.Employee.Model.Employee;
+import com.Employee.Service.EmailService;
 import com.Employee.Service.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -45,6 +47,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class EmployeeController {
 
   @Autowired EmployeeService employeeService;
+  
+  @Autowired EmailService emailService;
 
   /*@GetMapping("/hello")
   public String Hey() {
@@ -95,8 +99,13 @@ public class EmployeeController {
       produces = {MediaType.APPLICATION_JSON_VALUE})
   public ResponseEntity<Object> addEmp(@RequestBody Employee employee) {
     try {
-
-      return ResponseEntity.status(HttpStatus.CREATED).body(employeeService.addEmp(employee));
+    	Employee emp = employeeService.addEmp(employee);
+    	if(emp!=null) {
+       		emailService.sendCustomEmailTemp(emp);
+    		System.out.println("Email Sent SuccessFully");
+    	}
+      
+    	return ResponseEntity.status(HttpStatus.CREATED).body(emp);
 
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
