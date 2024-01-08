@@ -1,5 +1,8 @@
 package com.Dept.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -17,10 +20,12 @@ public class Department {
 	@Column(name = "dept_Name", nullable = false)
 	private String deptName;
 
+	 @JsonProperty("deptId")
 	public long getDeptId() {
 		return deptId;
 	}
 
+	@JsonIgnore
 	public void setDeptId(long deptId) {
 		this.deptId = deptId;
 	}

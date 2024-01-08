@@ -26,7 +26,7 @@ import com.Admin.Model.Employee;
 import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
-@RequestMapping("/admin/api")
+@RequestMapping("/admin/api/emp")
 public class AdminEmployeeController {
 
 	@Autowired
@@ -62,7 +62,7 @@ public class AdminEmployeeController {
 			MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> addEmp(@RequestBody Employee employee) {
 		try {
-			Employee emp = restTemplate.postForObject("http://Employee-Service/api/emp/add/", employee, Employee.class);
+			Employee emp = restTemplate.postForObject("http://Employee-Service/api/emp/add", employee, Employee.class);
 			return ResponseEntity.status(HttpStatus.CREATED).body("Employee Created: " + emp);
 
 		} catch (Exception e) {
@@ -98,8 +98,8 @@ public class AdminEmployeeController {
 	public ResponseEntity<?> getEmpByName(@RequestParam("name") String name) {
 		try {
 
-			Employee[] Emp = restTemplate.getForObject("http://Employee-Service/api/emp/getEmp/name?name=" + name,
-					Employee[].class);
+			String Emp = restTemplate.getForObject("http://Employee-Service/api/emp/getEmp/name?name=" + name,
+					String.class);
 
 			return ResponseEntity.status(HttpStatus.OK).body("Result: " + Emp);
 		} catch (Exception e) {
