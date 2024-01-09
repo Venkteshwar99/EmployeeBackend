@@ -126,9 +126,16 @@ public class EmployeeController {
       path = "/update/{id}",
       consumes = {MediaType.APPLICATION_JSON_VALUE},
       produces = {MediaType.APPLICATION_JSON_VALUE})
-  public ResponseEntity<Object> upateEmp(@RequestBody Employee employee, @PathVariable long id) {
+  public ResponseEntity<?> upateEmp(@RequestBody Employee employee, @PathVariable long id) {
     try {
-      return ResponseEntity.status(HttpStatus.OK).body(employeeService.updateEmp(employee, id));
+    	
+    	Employee updateEmp = employeeService.updateEmp(employee, id);
+    	if(updateEmp!=null) {
+       		emailService.sendCustomEmailTemp(updateEmp);
+    		System.out.println("Email Sent SuccessFully");
+    	}
+      
+      return ResponseEntity.status(HttpStatus.OK).body("Employee Updated: "+updateEmp);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }

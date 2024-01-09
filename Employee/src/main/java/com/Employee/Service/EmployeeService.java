@@ -12,7 +12,7 @@ public interface EmployeeService {
 
   public Employee addEmp(Employee employee);
 
-  public Object updateEmp(Employee updatedEmployee, long id) throws Exception;
+  public Employee updateEmp(Employee updatedEmployee, long id) throws Exception;
 
   public String deleteEmp(long id);
 

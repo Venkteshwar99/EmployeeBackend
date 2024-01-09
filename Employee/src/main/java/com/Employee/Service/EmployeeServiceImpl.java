@@ -87,7 +87,7 @@ public class EmployeeServiceImpl implements EmployeeService {
    * @param updatedEmployee The updated employee details.
    * @return The updated employee.
    */
-  public Object updateEmp(Employee updatedEmployee, long id) throws Exception {
+  public Employee updateEmp(Employee updatedEmployee, long id) throws Exception {
     try {
       Employee employee =
           dao.findById(id).orElseThrow(() -> EmployeeException.notFoundException(id));
