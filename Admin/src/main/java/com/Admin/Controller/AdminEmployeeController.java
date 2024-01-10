@@ -1,11 +1,10 @@
 package com.Admin.Controller;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,11 @@ import org.springframework.web.client.RestTemplate;
 import com.Admin.Model.Employee;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@Tag(name = "Admin Employee Controller", description = "Admin Employee Management API's")
 @RestController
 @RequestMapping("/admin/api/emp")
 public class AdminEmployeeController {
@@ -32,6 +35,8 @@ public class AdminEmployeeController {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	@Operation(summary = "Fetch all Active Employees", description = "Fetches all Active Employee entities and their data from data source")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "successful operation") })
 	@GetMapping(path = "/findAllActive", produces = { MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> getAllProducts() {
 		try {
@@ -58,6 +63,7 @@ public class AdminEmployeeController {
 		}
 	}
 
+	@Operation(summary = "Create a Employee", description = "Creates a new Employee")
 	@PostMapping(path = "/add", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<?> addEmp(@RequestBody Employee employee) {
@@ -70,6 +76,7 @@ public class AdminEmployeeController {
 		}
 	}
 
+	@Operation(summary = "Update a Employee by ID", description = "Update a Employee object by specifying its ID.")
 	@PutMapping(path = "/update/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
 	public ResponseEntity<Object> upateEmp(@RequestBody Employee employee, @PathVariable long id) {
@@ -83,6 +90,7 @@ public class AdminEmployeeController {
 		}
 	}
 
+	@Operation(summary = "Soft Delete a Employee by ID", description = "Soft Delete a Employee object by specifying its ID.")
 	@DeleteMapping(path = "/deleteActive/{id}")
 	public ResponseEntity<String> softDeleteEmp(@PathVariable("id") long id) {
 		try {
@@ -93,7 +101,7 @@ public class AdminEmployeeController {
 		}
 	}
 
-	@Operation(summary = "Search Employee by Name", description = "Search a Employees by Name.")
+	@Operation(summary = "Search Employee by Id, Name, Department, Role, Location", description = "Search a Employees by Id, Name, Department, Role, Location.")
 	@GetMapping(path = "/getEmp/name", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getEmpByName(@RequestParam("name") String name) {
 		try {
@@ -109,15 +117,18 @@ public class AdminEmployeeController {
 	}
 
 	@PatchMapping("/update-status/{id}")
-	public ResponseEntity<Boolean> updateEmployeeStatus(@PathVariable Long id, @RequestBody Map<String, Boolean> status)
+	public ResponseEntity<?> updateEmployeeStatus(@PathVariable("id") long id, @RequestBody Map<String, Boolean> status)
 			throws Exception {
 		try {
-			Employee employee = restTemplate.patchForObject("http://Employee-Service/api/emp/update/" + id,
-					Employee.class, null, status);
-			return ResponseEntity.status(HttpStatus.OK).body(employee.isActive());
+			String url = "http://Employee-Service/api/emp/update-status/" + id;
+			// Create an HttpEntity with the request body and headers
+			HttpEntity<Map<String, Boolean>> requestEntity = new HttpEntity<>(status);
+			// Use exchange method to send a PATCH request
+			ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.PATCH, requestEntity,
+					String.class);
+			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity);
 		} catch (Exception e) {
-
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error in Searching: " + id + " " + e.getMessage());
 		}
 	}
 }

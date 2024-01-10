@@ -11,7 +11,7 @@ public interface DepartmentService {
 
 	  public Department addDept(Department dept) throws Exception;
 
-	  public Object updateDept(Department updatedDept, long id) throws Exception;
+	  public Department updateDept(Department updatedDept, long id) throws Exception;
 
 	  public String deleteDept(long id) throws Exception;
 

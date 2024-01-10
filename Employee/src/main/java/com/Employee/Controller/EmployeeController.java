@@ -221,7 +221,7 @@ public class EmployeeController {
    * @param name
    * @return The retrieved employee.
    */
-  @Operation(summary = "Search Employee by Name", description = "Search a Employees by Name.")
+  @Operation(summary = "Search Employee by Id, Name, Department, Role, Location", description = "Search a Employees by Id, Name, Department, Role, Location.")
   @GetMapping(path = "/getEmp/name")
   public ResponseEntity<?> getEmpByName(@RequestParam("name") String name) {
     try {
@@ -372,8 +372,8 @@ public class EmployeeController {
   }
 
   @PatchMapping("/update-status/{id}")
-  public ResponseEntity<Boolean> updateEmployeeStatus(
-      @PathVariable Long id, @RequestBody Map<String, Boolean> status) throws Exception {
+  public ResponseEntity<?> updateEmployeeStatus(
+		  @PathVariable("id") long id, @RequestBody Map<String, Boolean> status) throws Exception {
 
     Optional<Employee> optionalEmployee =
         employeeService.getAllEmp().stream()

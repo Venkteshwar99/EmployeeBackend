@@ -40,7 +40,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 		}
 	}
 
-	public Object updateDept(Department updatedDept, long id) throws Exception {
+	public Department updateDept(Department updatedDept, long id) throws Exception {
 		try {
 			Department dept = repo.findById(id).orElseThrow(() -> new Exception("Department Id not found"));
 			dept.setDeptName(updatedDept.getDeptName());

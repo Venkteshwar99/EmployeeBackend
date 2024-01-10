@@ -21,7 +21,9 @@ import com.Dept.Service.DepartmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@Tag(name = "Department Controller", description = "Department Management API's")
 @RestController
 @RequestMapping("/api/dept")
 public class DepartmentController {
@@ -54,9 +56,11 @@ public class DepartmentController {
 	@Operation(summary = "Update a Department by ID", description = "Update a Department object by specifying its ID.")
 	@PutMapping(path = "/update/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<Object> upateEmp(@RequestBody Department Department, @PathVariable long id) {
+	public ResponseEntity<Object> upateEmp(@PathVariable("id") long id,@RequestBody Department Department) {
 		try {
-			return ResponseEntity.status(HttpStatus.OK).body(departmentService.updateDept(Department, id));
+			Department dept = departmentService.updateDept(Department, id);
+			System.out.println("dept: "+dept);
+			return ResponseEntity.status(HttpStatus.OK).body("Department Updated: "+dept);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
