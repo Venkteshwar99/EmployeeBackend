@@ -120,13 +120,8 @@ public class AdminEmployeeController {
 	public ResponseEntity<?> updateEmployeeStatus(@PathVariable("id") long id, @RequestBody Map<String, Boolean> status)
 			throws Exception {
 		try {
-			String url = "http://Employee-Service/api/emp/update-status/" + id;
-			// Create an HttpEntity with the request body and headers
-			HttpEntity<Map<String, Boolean>> requestEntity = new HttpEntity<>(status);
-			// Use exchange method to send a PATCH request
-			ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.PATCH, requestEntity,
-					String.class);
-			return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity);
+			String responseEntity = restTemplate.patchForObject("http://Employee-Service/api/emp/update-status/" + id, status, String.class);
+			return ResponseEntity.status(200).body(responseEntity);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error in Searching: " + id + " " + e.getMessage());
 		}

@@ -46,7 +46,7 @@ public class AdminDepartmentController {
 	@GetMapping(path = "/getDept/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> getActiveEmpById(@PathVariable("id") long id) {
 		try {
-			Department dept = restTemplate.getForObject("http://Department-Service/api/emp/getDept/" + id,
+			Department dept = restTemplate.getForObject("http://Department-Service/api/dept/getDept/" + id,
 					Department.class);
 			return ResponseEntity.status(HttpStatus.OK).body("Result: " + dept);
 		} catch (Exception e) {

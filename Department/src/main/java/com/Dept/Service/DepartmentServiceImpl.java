@@ -57,7 +57,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 			repo.deleteById(id);
 			return "Department: " + id + " Deleted";
 		} else {
-			throw new Exception("Error in Deleting Department");
+			throw new Exception("Department Not Found with Id: "+id);
 		}
 	}
 
