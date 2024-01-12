@@ -1,4 +1,5 @@
 package com.Dept.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -57,17 +58,18 @@ public class DepartmentServiceImpl implements DepartmentService {
 			repo.deleteById(id);
 			return "Department: " + id + " Deleted";
 		} else {
-			throw new Exception("Department Not Found with Id: "+id);
+			throw new Exception("Department Not Found with Id: " + id);
 		}
 	}
 
 	@Override
 	public Optional<Department> getDeptById(long id) throws Exception {
-		try {
-			return Optional.ofNullable(repo.findById(id).orElseThrow(() -> new Exception("Department Id not found")));
-		} catch (Exception e) {
-			throw new Exception("Error while retriving Department by ID", e);
-		}
+			Optional<Department> dept = repo.findById(id);
+			if (dept.isPresent()) {
+				return dept;
+			} else {
+				throw new Exception("Department Not found with Id:" + id);
+			}
 	}
 
 	private long generateUniqueID() {

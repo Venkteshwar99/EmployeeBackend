@@ -67,7 +67,7 @@ public class PdfGenerator {
       table.addCell(String.valueOf(emp.getEmpId()));
       table.addCell(emp.getFullName());
       table.addCell(emp.getEmail());
-      table.addCell(emp.getEmpDept());
+      table.addCell(String.valueOf(emp.getDeptId()));
       table.addCell(emp.getEmpRole());
       table.addCell(emp.getLocation());
       table.addCell(String.valueOf(emp.isActive()));

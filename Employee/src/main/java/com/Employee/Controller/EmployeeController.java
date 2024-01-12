@@ -1,7 +1,6 @@
 package com.Employee.Controller;
 
 import com.Employee.Helper.PdfGenerator;
-import com.Employee.Model.Email;
 import com.Employee.Model.Employee;
 import com.Employee.Service.EmailService;
 import com.Employee.Service.EmployeeService;
@@ -47,7 +46,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class EmployeeController {
 
   @Autowired EmployeeService employeeService;
-  
+
   @Autowired EmailService emailService;
 
   /*@GetMapping("/hello")
@@ -99,13 +98,13 @@ public class EmployeeController {
       produces = {MediaType.APPLICATION_JSON_VALUE})
   public ResponseEntity<Object> addEmp(@RequestBody Employee employee) {
     try {
-    	Employee emp = employeeService.addEmp(employee);
-    	if(emp!=null) {
-       		emailService.sendCustomEmailTemp(emp);
-    		System.out.println("Email Sent SuccessFully");
-    	}
-      
-    	return ResponseEntity.status(HttpStatus.CREATED).body(emp);
+      Employee emp = employeeService.addEmp(employee);
+      if (emp != null) {
+        emailService.sendCustomEmailTemp(emp);
+        System.out.println("Email Sent SuccessFully");
+      }
+
+      return ResponseEntity.status(HttpStatus.CREATED).body(emp);
 
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -128,14 +127,14 @@ public class EmployeeController {
       produces = {MediaType.APPLICATION_JSON_VALUE})
   public ResponseEntity<?> upateEmp(@RequestBody Employee employee, @PathVariable long id) {
     try {
-    	
-    	Employee updateEmp = employeeService.updateEmp(employee, id);
-    	if(updateEmp!=null) {
-       		emailService.sendCustomEmailTemp(updateEmp);
-    		System.out.println("Email Sent SuccessFully");
-    	}
-      
-      return ResponseEntity.status(HttpStatus.OK).body("Employee Updated: "+updateEmp);
+
+      Employee updateEmp = employeeService.updateEmp(employee, id);
+      if (updateEmp != null) {
+        emailService.sendCustomEmailTemp(updateEmp);
+        System.out.println("Email Sent SuccessFully");
+      }
+
+      return ResponseEntity.status(HttpStatus.OK).body("Employee Updated: " + updateEmp);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
@@ -189,7 +188,7 @@ public class EmployeeController {
       summary = "Retrieve a Active Employee by ID",
       description = "Get a Active Employee object by specifying its ID.")
   @GetMapping(path = "/getActiveEmp/{id}")
-  public ResponseEntity<Object> getActiveEmpById(@PathVariable("id") long id) {
+  public ResponseEntity<?> getActiveEmpById(@PathVariable("id") long id) {
     try {
       return ResponseEntity.status(HttpStatus.OK).body(employeeService.getActiveEmpById(id));
     } catch (Exception e) {
@@ -221,7 +220,9 @@ public class EmployeeController {
    * @param name
    * @return The retrieved employee.
    */
-  @Operation(summary = "Search Employee by Id, Name, Department, Role, Location", description = "Search a Employees by Id, Name, Department, Role, Location.")
+  @Operation(
+      summary = "Search Employee by Id, Name, Department, Role, Location",
+      description = "Search a Employees by Id, Name, Department, Role, Location.")
   @GetMapping(path = "/getEmp/name")
   public ResponseEntity<?> getEmpByName(@RequestParam("name") String name) {
     try {
@@ -373,7 +374,7 @@ public class EmployeeController {
 
   @PatchMapping("/update-status/{id}")
   public ResponseEntity<?> updateEmployeeStatus(
-		  @PathVariable("id") long id, @RequestBody Map<String, Boolean> status) throws Exception {
+      @PathVariable("id") long id, @RequestBody Map<String, Boolean> status) throws Exception {
 
     Optional<Employee> optionalEmployee =
         employeeService.getAllEmp().stream()

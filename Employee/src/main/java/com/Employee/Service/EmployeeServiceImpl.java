@@ -1,6 +1,8 @@
 package com.Employee.Service;
 
 import com.Employee.Exception.EmployeeException;
+import com.Employee.Model.ApiResponse;
+import com.Employee.Model.Department;
 import com.Employee.Model.Employee;
 import com.Employee.Repository.EmployeeDao;
 import java.time.LocalDateTime;
@@ -9,13 +11,17 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 /** Service managing employee-related business logic. */
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
   @Autowired EmployeeDao dao;
+
+  @Autowired RestTemplate restTemplate;
 
   /**
    * getAllEmp() method Retrieves a list of all employees.
@@ -57,6 +63,7 @@ public class EmployeeServiceImpl implements EmployeeService {
       throw new Exception("Error while retriving employees list");
     }
   }
+
   /**
    * addEmp method Creates a new employee.
    *
@@ -67,8 +74,15 @@ public class EmployeeServiceImpl implements EmployeeService {
   public Employee addEmp(Employee employee) {
 
     if (!dao.existsById(employee.getEmpId())) {
+
+      Department dept =
+          restTemplate.getForObject(
+              "http://Department-Service/api/dept/getDept/" + employee.getDeptId(),
+              Department.class);
+
       employee.setEmpId(generateUniqueID());
       employee.setFullName();
+      employee.setDeptId(dept.getDeptId());
       employee.setActive(true);
       employee.setCreated(LocalDateTime.now());
       employee.setUpdated(LocalDateTime.now());
@@ -88,29 +102,30 @@ public class EmployeeServiceImpl implements EmployeeService {
    * @return The updated employee.
    */
   public Employee updateEmp(Employee updatedEmployee, long id) throws Exception {
-    try {
-      Employee employee =
-          dao.findById(id).orElseThrow(() -> EmployeeException.notFoundException(id));
 
-      employee.setFirstName(updatedEmployee.getFirstName());
-      employee.setLastName(updatedEmployee.getLastName());
-      employee.setFullName();
-      
-      employee.setEmpDept(updatedEmployee.getEmpDept());
-      employee.setEmpRole(updatedEmployee.getEmpRole());
-      employee.setActive(updatedEmployee.isActive());
-      employee.setEmail(updatedEmployee.getEmail());
-      employee.setLocation(updatedEmployee.getLocation());
-      if (employee.getCreated() == null) {
-        employee.setCreated(LocalDateTime.now());
-      }
-      employee.setUpdated(LocalDateTime.now());
+    Employee employee = dao.findById(id).orElseThrow(() -> EmployeeException.notFoundException(id));
 
-      return dao.save(employee);
-    } catch (Exception e) {
-      e.getMessage();
-      throw new RuntimeException("Error while updating employee");
+    Department dept =
+        restTemplate.getForObject(
+            "http://Department-Service/api/dept/getDept/" + updatedEmployee.getDeptId(),
+            Department.class);
+
+    System.out.println(dept.getDeptId());
+    employee.setFirstName(updatedEmployee.getFirstName());
+    employee.setLastName(updatedEmployee.getLastName());
+    employee.setFullName();
+
+    employee.setDeptId(dept.getDeptId());
+    employee.setEmpRole(updatedEmployee.getEmpRole());
+    employee.setActive(updatedEmployee.isActive());
+    employee.setEmail(updatedEmployee.getEmail());
+    employee.setLocation(updatedEmployee.getLocation());
+    if (employee.getCreated() == null) {
+      employee.setCreated(LocalDateTime.now());
     }
+    employee.setUpdated(LocalDateTime.now());
+
+    return dao.save(employee);
   }
 
   /**
@@ -154,13 +169,26 @@ public class EmployeeServiceImpl implements EmployeeService {
    * @return The retrieved Active employee.
    */
   @Override
-  public Optional<Employee> getActiveEmpById(long id) throws Exception {
+  public ApiResponse getActiveEmpById(long id) throws Exception {
     try {
-      Optional<Employee> activeEmp = dao.findByIdAndIsActiveTrue(id);
-      return Optional.ofNullable(
-          activeEmp.orElseThrow(() -> new EmployeeException("Employee Not found or is In Active")));
+
+      Employee activeEmp =
+          dao.findByIdAndIsActiveTrue(id)
+              .orElseThrow(() -> new EmployeeException("Employee Not found or is In Active"));
+
+      ResponseEntity<Department> responseEntity =
+          restTemplate.getForEntity(
+              "http://Department-Service/api/dept/getDept/" + activeEmp.getDeptId(),
+              Department.class);
+
+      Department dept = responseEntity.getBody();
+      ApiResponse apiResponse = new ApiResponse();
+      apiResponse.setEmployee(activeEmp);
+      apiResponse.setDepartment(dept);
+
+      return apiResponse;
     } catch (Exception e) {
-      throw new RuntimeException(e.getMessage());
+      throw new EmployeeException(e.getMessage());
     }
   }
 
@@ -172,11 +200,11 @@ public class EmployeeServiceImpl implements EmployeeService {
    */
   @Override
   public Optional<Employee> getEmpById(long id) throws Exception {
-    try {
-      return Optional.ofNullable(
-          dao.findById(id).orElseThrow(() -> new EmployeeException("Employee Id not found")));
-    } catch (Exception e) {
-      throw new Exception("Error while retriving Employee by ID", e);
+    Optional<Employee> emp = dao.findById(id);
+    if (emp.isPresent()) {
+      return emp;
+    } else {
+      throw new Exception("Employee Not found with Id:" + id);
     }
   }
 

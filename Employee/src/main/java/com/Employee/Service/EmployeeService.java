@@ -1,5 +1,6 @@
 package com.Employee.Service;
 
+import com.Employee.Model.ApiResponse;
 import com.Employee.Model.Employee;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +27,7 @@ public interface EmployeeService {
 
   public boolean softDeleteEmployee(long id) throws Exception;
 
-  Optional<Employee> getActiveEmpById(long id) throws Exception;
+  ApiResponse getActiveEmpById(long id) throws Exception;
 
   public List<Employee> getAllActiveEmp() throws Exception;
 }

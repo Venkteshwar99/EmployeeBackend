@@ -37,9 +37,15 @@ public class Employee {
   @Column(name = "email", nullable = false)
   private String email;
 
-  @Schema(description = "Department", example = "DEV")
-  @Column(name = "emp_Dept", nullable = false)
-  private String empDept;
+  /*
+   * @Schema(description = "Department", example = "DEV")
+   *
+   * @Column(name = "emp_Dept", nullable = false) private String empDept;
+   */
+
+  // @Schema(description = "Department", example = "DEV")
+  @Column(name = "dept_id", nullable = false)
+  private long deptId;
 
   @Schema(description = "Role", example = "Manager")
   @Column(name = "emp_Role", nullable = false)
@@ -80,6 +86,14 @@ public class Employee {
   @JsonIgnore
   public void setEmpId(long empId) {
     this.empId = empId;
+  }
+
+  public long getDeptId() {
+    return deptId;
+  }
+
+  public void setDeptId(long deptId) {
+    this.deptId = deptId;
   }
 
   /**
@@ -136,20 +150,6 @@ public class Employee {
    */
   public void setEmail(String email) {
     this.email = email;
-  }
-
-  /**
-   * @return the empDept
-   */
-  public String getEmpDept() {
-    return empDept;
-  }
-
-  /**
-   * @param empDept the empDept to set
-   */
-  public void setEmpDept(String empDept) {
-    this.empDept = empDept;
   }
 
   /**
@@ -248,8 +248,8 @@ public class Employee {
         + fullName
         + ", email="
         + email
-        + ", empDept="
-        + empDept
+        + ", deptId="
+        + deptId
         + ", empRole="
         + empRole
         + ", photo="
@@ -286,6 +286,7 @@ public class Employee {
       String fullName,
       String email,
       String empDept,
+      long deptId,
       String empRole,
       byte[] photo,
       boolean isActive,
@@ -298,7 +299,7 @@ public class Employee {
     this.lastName = lastName;
     this.fullName = generateFullName();
     this.email = email;
-    this.empDept = empDept;
+    this.deptId = deptId;
     this.empRole = empRole;
     this.photo = photo;
     this.isActive = isActive;
