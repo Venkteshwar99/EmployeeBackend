@@ -46,6 +46,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 		}
 	}
 
+	@Override
 	public Department updateDept(Department updatedDept, long id) throws Exception {
 		try {
 			Department dept = repo.findById(id).orElseThrow(() -> new Exception("Department Id not found"));
@@ -65,6 +66,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 		}
 	}
 
+	@Override
 	public String deleteDept(long id) throws Exception {
 		if (repo.existsById(id)) {
 			repo.deleteById(id);
@@ -112,6 +114,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 	 * @return True If the employee with the given ID is found & soft deleted,false
 	 *         otherwise.
 	 */
+	@Override
 	public boolean softDeleteDept(long id) throws Exception {
 		Optional<Department> opDept = getDeptById(id);
 
