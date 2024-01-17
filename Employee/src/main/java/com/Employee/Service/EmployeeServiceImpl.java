@@ -6,6 +6,7 @@ import com.Employee.Model.Department;
 import com.Employee.Model.Employee;
 import com.Employee.Repository.EmployeeDao;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +30,24 @@ public class EmployeeServiceImpl implements EmployeeService {
    * @return A list of employees.
    */
   @Override
-  public List<Employee> getAllEmp() throws Exception {
+  public List<ApiResponse> getAllEmp() throws Exception {
     try {
-      List<Employee> list = dao.findAll();
-      if (!list.isEmpty()) {
-        return list;
-      } else {
-        throw EmployeeException.NoContentException();
+
+      List<Employee> employees = dao.findAll();
+
+      List<ApiResponse> responses = new ArrayList<>();
+
+      for (Employee employee : employees) {
+        long deptId = employee.getDeptId();
+        Department dept =
+            restTemplate.getForObject(
+                "http://Department-Service/api/dept/getDept/" + deptId, Department.class);
+        System.out.println("Department: " + dept);
+
+        ApiResponse apiResponse = new ApiResponse(employee, dept);
+        responses.add(apiResponse);
       }
+      return responses;
     } catch (Exception e) {
       e.getMessage();
       throw new Exception("Error while retriving employees list");
@@ -50,14 +61,23 @@ public class EmployeeServiceImpl implements EmployeeService {
    * @throws Exception
    */
   @Override
-  public List<Employee> getAllActiveEmp() throws Exception {
+  public List<ApiResponse> getAllActiveEmp() throws Exception {
     try {
       List<Employee> list = dao.findAllByIsActiveTrue();
-      if (!list.isEmpty()) {
-        return list;
-      } else {
-        throw EmployeeException.NoContentException();
+
+      List<ApiResponse> responses = new ArrayList<>();
+
+      for (Employee employee : list) {
+        long deptId = employee.getDeptId();
+        Department dept =
+            restTemplate.getForObject(
+                "http://Department-Service/api/dept/getDept/" + deptId, Department.class);
+        System.out.println("Department: " + dept);
+
+        ApiResponse apiResponse = new ApiResponse(employee, dept);
+        responses.add(apiResponse);
       }
+      return responses;
     } catch (Exception e) {
       e.getMessage();
       throw new Exception("Error while retriving employees list");
@@ -216,14 +236,22 @@ public class EmployeeServiceImpl implements EmployeeService {
    * @throws Exception
    */
   @Override
-  public Optional<List<Employee>> getEmpByName(String name) throws Exception {
+  public List<ApiResponse> getEmpByName(String name) throws Exception {
     try {
       Optional<List<Employee>> op = dao.empName(name);
-      if (op.isPresent()) {
-        return op;
-      } else {
-        throw new EmployeeException("Error");
+      List<ApiResponse> responses = new ArrayList<>();
+
+      for (Employee employee : op.get()) {
+        long deptId = employee.getDeptId();
+        Department dept =
+            restTemplate.getForObject(
+                "http://Department-Service/api/dept/getDept/" + deptId, Department.class);
+        System.out.println("Department: " + dept);
+
+        ApiResponse apiResponse = new ApiResponse(employee, dept);
+        responses.add(apiResponse);
       }
+      return responses;
     } catch (Exception e) {
       System.out.println(e.getMessage());
       throw new Exception(

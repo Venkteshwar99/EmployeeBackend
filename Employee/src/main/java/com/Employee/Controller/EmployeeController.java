@@ -65,8 +65,8 @@ public class EmployeeController {
           "Fetches all Active & InActive Employee entities and their data from data source")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "successful operation")})
   @GetMapping(path = "/findAll")
-  public ResponseEntity<List<Employee>> getAllEmp() throws Exception {
-    List<Employee> list = employeeService.getAllEmp();
+  public ResponseEntity<List<com.Employee.Model.ApiResponse>> getAllEmp() throws Exception {
+    List<com.Employee.Model.ApiResponse> list = employeeService.getAllEmp();
     return ResponseEntity.ok(list);
   }
 
@@ -80,8 +80,8 @@ public class EmployeeController {
       description = "Fetches all Active Employee entities and their data from data source")
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "successful operation")})
   @GetMapping(path = "/findAllActive")
-  public ResponseEntity<List<Employee>> getAllActiveEmp() throws Exception {
-    List<Employee> list = employeeService.getAllActiveEmp();
+  public ResponseEntity<List<com.Employee.Model.ApiResponse>> getAllActiveEmp() throws Exception {
+    List<com.Employee.Model.ApiResponse> list = employeeService.getAllActiveEmp();
     return ResponseEntity.ok(list);
   }
 
@@ -226,7 +226,7 @@ public class EmployeeController {
   @GetMapping(path = "/getEmp/name")
   public ResponseEntity<?> getEmpByName(@RequestParam("name") String name) {
     try {
-      Optional<List<Employee>> empByName = employeeService.getEmpByName(name);
+      List<com.Employee.Model.ApiResponse> empByName = employeeService.getEmpByName(name);
       return ResponseEntity.status(HttpStatus.OK).body(empByName);
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -366,7 +366,7 @@ public class EmployeeController {
     String headervalue = "attachment; filename=Employee" + currentDateTime + ".pdf";
 
     response.setHeader(headerkey, headervalue);
-    List<Employee> listofEmployees = employeeService.getAllEmp();
+    List<com.Employee.Model.ApiResponse> listofEmployees = employeeService.getAllEmp();
     PdfGenerator generator = new PdfGenerator();
 
     generator.generate(listofEmployees, response);
@@ -376,13 +376,13 @@ public class EmployeeController {
   public ResponseEntity<?> updateEmployeeStatus(
       @PathVariable("id") long id, @RequestBody Map<String, Boolean> status) throws Exception {
 
-    Optional<Employee> optionalEmployee =
+    Optional<com.Employee.Model.ApiResponse> optionalEmployee =
         employeeService.getAllEmp().stream()
-            .filter(employee -> employee.getEmpId() == id)
+            .filter(employee -> employee.getEmployee().getEmpId() == id)
             .findFirst();
 
     if (optionalEmployee.isPresent()) {
-      Employee employee = optionalEmployee.get();
+      Employee employee = optionalEmployee.get().getEmployee();
       employee.setActive(status.get("active"));
       employeeService.setOrUpdateImageEmp(employee);
       return ResponseEntity.status(HttpStatus.OK)

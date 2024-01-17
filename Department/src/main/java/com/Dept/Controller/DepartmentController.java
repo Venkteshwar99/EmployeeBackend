@@ -72,7 +72,7 @@ public class DepartmentController {
 	@Operation(summary = "Update a Department by ID", description = "Update a Department object by specifying its ID.")
 	@PutMapping(path = "/update/{id}", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<Object> upateDept(@PathVariable("id") long id, @RequestBody Department Department) {
+	public ResponseEntity<?> upateDept(@PathVariable("id") long id, @RequestBody Department Department) {
 		try {
 			Department dept = departmentService.updateDept(Department, id);
 			System.out.println("dept: " + dept);

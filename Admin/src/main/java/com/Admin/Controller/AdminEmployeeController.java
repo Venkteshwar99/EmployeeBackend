@@ -54,8 +54,8 @@ public class AdminEmployeeController {
 	@GetMapping(path = "/getActiveEmp/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> getActiveEmpById(@PathVariable("id") long id) {
 		try {
-			Employee Emp = restTemplate.getForObject("http://Employee-Service/api/emp/getActiveEmp/" + id,
-					Employee.class);
+			String Emp = restTemplate.getForObject("http://Employee-Service/api/emp/getActiveEmp/"+id,
+					String.class);
 			return ResponseEntity.status(HttpStatus.OK).body("Result: " + Emp);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)

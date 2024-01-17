@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface EmployeeService {
 
-  public List<Employee> getAllEmp() throws Exception;
+  public List<ApiResponse> getAllEmp() throws Exception;
 
   public Employee addEmp(Employee employee);
 
@@ -19,7 +19,7 @@ public interface EmployeeService {
 
   public Optional<Employee> getEmpById(long id) throws Exception;
 
-  public Optional<List<Employee>> getEmpByName(String name) throws Exception;
+  public List<ApiResponse> getEmpByName(String name) throws Exception;
 
   public Page<Employee> getPageDetails(Pageable p);
 
@@ -29,5 +29,5 @@ public interface EmployeeService {
 
   ApiResponse getActiveEmpById(long id) throws Exception;
 
-  public List<Employee> getAllActiveEmp() throws Exception;
+  public List<ApiResponse> getAllActiveEmp() throws Exception;
 }

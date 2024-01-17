@@ -32,7 +32,6 @@ public interface EmployeeDao extends JpaRepository<Employee, Long> {
               + "e.emp_Id LIKE %:name% OR "
               + "e.full_Name LIKE %:name% OR "
               + "e.location LIKE %:name% OR "
-              + "e.emp_Dept LIKE %:name% OR "
               + "e.emp_Role LIKE %:name% ",
       nativeQuery = true)
   Optional<List<Employee>> empName(@Param("name") String name);

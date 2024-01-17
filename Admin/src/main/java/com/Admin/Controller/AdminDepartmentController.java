@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.Admin.Model.Department;
-import com.Admin.Model.Employee;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -63,8 +62,8 @@ public class AdminDepartmentController {
 	@GetMapping(path = "/getDept/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> getDeptById(@PathVariable("id") long id) {
 		try {
-			Department dept = restTemplate.getForObject("http://Department-Service/api/dept/getDept/" + id,
-					Department.class);
+			String dept = restTemplate.getForObject("http://Department-Service/api/dept/getDept/" + id,
+					String.class);
 			return ResponseEntity.status(HttpStatus.OK).body("Result: " + dept);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -107,6 +106,7 @@ public class AdminDepartmentController {
 	public ResponseEntity<Object> upateDept(@PathVariable("id") long id, @RequestBody Department department) {
 		try {
 			restTemplate.put("http://Department-Service/api/dept/update/" + id, department, Department.class);
+			
 			return ResponseEntity.status(HttpStatus.OK).body("Updated Department with Id: " + id);
 
 		} catch (Exception e) {

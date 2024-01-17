@@ -1,6 +1,6 @@
 package com.Employee.Helper;
 
-import com.Employee.Model.Employee;
+import com.Employee.Model.ApiResponse;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Font;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class PdfGenerator {
 
-  public void generate(List<Employee> employeeList, HttpServletResponse response)
+  public void generate(List<ApiResponse> listofEmployees, HttpServletResponse response)
       throws DocumentException, IOException {
 
     Document document = new Document(PageSize.A4);
@@ -63,16 +63,16 @@ public class PdfGenerator {
     cell.setPhrase(new Phrase("Photo", font));
     table.addCell(cell);
 
-    for (Employee emp : employeeList) {
-      table.addCell(String.valueOf(emp.getEmpId()));
-      table.addCell(emp.getFullName());
-      table.addCell(emp.getEmail());
-      table.addCell(String.valueOf(emp.getDeptId()));
-      table.addCell(emp.getEmpRole());
-      table.addCell(emp.getLocation());
-      table.addCell(String.valueOf(emp.isActive()));
+    for (ApiResponse emp : listofEmployees) {
+      table.addCell(String.valueOf(emp.getEmployee().getEmpId()));
+      table.addCell(emp.getEmployee().getFullName());
+      table.addCell(emp.getEmployee().getEmail());
+      table.addCell(String.valueOf(emp.getEmployee().getDeptId()));
+      table.addCell(emp.getEmployee().getEmpRole());
+      table.addCell(emp.getEmployee().getLocation());
+      table.addCell(String.valueOf(emp.getEmployee().isActive()));
       try {
-        byte[] photo = emp.getPhoto();
+        byte[] photo = emp.getEmployee().getPhoto();
         PdfPCell pCell = new PdfPCell();
         if (photo != null && photo.length > 0) {
           Image img = Image.getInstance(photo);
