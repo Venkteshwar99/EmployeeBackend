@@ -100,7 +100,8 @@ public class EmployeeController {
     try {
       Employee emp = employeeService.addEmp(employee);
       if (emp != null) {
-        emailService.sendCustomEmailTemp(emp);
+    	String operationType ="create";  
+        emailService.sendCustomEmailTemp(emp,operationType);
         System.out.println("Email Sent SuccessFully");
       }
 
@@ -130,7 +131,8 @@ public class EmployeeController {
 
       Employee updateEmp = employeeService.updateEmp(employee, id);
       if (updateEmp != null) {
-        emailService.sendCustomEmailTemp(updateEmp);
+    	  String operationType = "update";
+        emailService.sendCustomEmailTemp(updateEmp, operationType);
         System.out.println("Email Sent SuccessFully");
       }
 
@@ -170,7 +172,10 @@ public class EmployeeController {
   @DeleteMapping(path = "/deleteActive/{id}")
   public ResponseEntity<String> softDeleteEmp(@PathVariable("id") long id) {
     try {
-      boolean emp = employeeService.softDeleteEmployee(id);
+        	boolean emp = employeeService.softDeleteEmployee(id);
+       	  String operationType = "delete";
+           emailService.sendCustomEmailTemp(null, operationType);
+           System.out.println("Email Sent SuccessFully");
       return ResponseEntity.status(HttpStatus.OK)
           .body(emp + " Employee Soft Deleted Successfully: " + id);
     } catch (Exception e) {
@@ -372,6 +377,12 @@ public class EmployeeController {
     generator.generate(listofEmployees, response);
   }
 
+  /**
+   * Modfies an employee's status field.
+   *
+   * @param id The ID of the employee.
+   * @return A Boolean value indicating the result of the operation.
+   */
   @PatchMapping("/update-status/{id}")
   public ResponseEntity<?> updateEmployeeStatus(
       @PathVariable("id") long id, @RequestBody Map<String, Boolean> status) throws Exception {

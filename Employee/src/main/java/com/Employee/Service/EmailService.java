@@ -10,5 +10,5 @@ public interface EmailService {
 
   public void sendEmailAttachments(Email email) throws MessagingException;
 
-  public void sendCustomEmailTemp(Employee emp);
+  public void sendCustomEmailTemp(Employee emp, String operationType);
 }
