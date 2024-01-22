@@ -85,6 +85,8 @@ public class EmailServiceImpl implements EmailService {
 				templatePath = ".\\src\\main\\resources\\templates\\deleteTemplate.html";
 			}
 			if ("update".equalsIgnoreCase(operationType)) {
+				email.setSubject("Employee Updated");
+				email.setMessage("Hi your account has been updated");
 				templatePath = ".\\src\\main\\resources\\templates\\updateTemplate.html";
 			}
 
