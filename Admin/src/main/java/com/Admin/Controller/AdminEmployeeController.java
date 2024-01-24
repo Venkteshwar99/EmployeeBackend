@@ -1,10 +1,11 @@
 package com.Admin.Controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -116,6 +117,7 @@ public class AdminEmployeeController {
 		}
 	}
 
+	@Operation(summary = "Patch a Employee status by ID", description = "Patch a Employee status by specifying its ID.")
 	@PatchMapping("/update-status/{id}")
 	public ResponseEntity<?> updateEmployeeStatus(@PathVariable("id") long id, @RequestBody Map<String, Boolean> status)
 			throws Exception {
@@ -126,4 +128,23 @@ public class AdminEmployeeController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error in Searching: " + id + " " + e.getMessage());
 		}
 	}
+	
+	 /**
+	   * Generates an Pdf file.
+	   * @return A ResponseEntity with a Pdf file indicating the result of the operation.
+	   */
+	  @Operation(summary = "Get Pdf of all Employee's", description = "Get Pdf of all Employee's")
+	  @GetMapping("/export-to-pdf")
+      public ResponseEntity<byte[]> downloadPdfFile() {
+          String url = "http://Employee-Service/api/emp/export-to-pdf"; // Replace with your actual API endpoint URL
+          HttpHeaders headers = new HttpHeaders();
+          headers.setContentType(MediaType.APPLICATION_PDF);
+          SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD-HH-MM-SS");
+          String currentDateTime = dateFormat.format(new Date());
+          headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Employee" + currentDateTime + ".pdf");
+          ResponseEntity<byte[]> response = restTemplate.getForEntity(url, byte[].class);
+          return ResponseEntity.ok()
+                  .headers(headers)
+                  .body(response.getBody());
+      }
 }

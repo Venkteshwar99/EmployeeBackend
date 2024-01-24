@@ -100,8 +100,8 @@ public class EmployeeController {
     try {
       Employee emp = employeeService.addEmp(employee);
       if (emp != null) {
-    	String operationType ="create";  
-        emailService.sendCustomEmailTemp(emp,operationType);
+        String operationType = "create";
+        emailService.sendCustomEmailTemp(emp, operationType);
         System.out.println("Email Sent SuccessFully");
       }
 
@@ -131,7 +131,7 @@ public class EmployeeController {
 
       Employee updateEmp = employeeService.updateEmp(employee, id);
       if (updateEmp != null) {
-    	  String operationType = "update";
+        String operationType = "update";
         emailService.sendCustomEmailTemp(updateEmp, operationType);
         System.out.println("Email Sent SuccessFully");
       }
@@ -172,10 +172,10 @@ public class EmployeeController {
   @DeleteMapping(path = "/deleteActive/{id}")
   public ResponseEntity<String> softDeleteEmp(@PathVariable("id") long id) {
     try {
-        	boolean emp = employeeService.softDeleteEmployee(id);
-       	  String operationType = "delete";
-           emailService.sendCustomEmailTemp(null, operationType);
-           System.out.println("Email Sent SuccessFully");
+      boolean emp = employeeService.softDeleteEmployee(id);
+      String operationType = "delete";
+      emailService.sendCustomEmailTemp(null, operationType);
+      System.out.println("Email Sent SuccessFully");
       return ResponseEntity.status(HttpStatus.OK)
           .body(emp + " Employee Soft Deleted Successfully: " + id);
     } catch (Exception e) {

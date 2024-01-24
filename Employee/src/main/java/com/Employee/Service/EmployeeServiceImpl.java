@@ -42,7 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Department dept =
             restTemplate.getForObject(
                 "http://Department-Service/api/dept/getDept/" + deptId, Department.class);
-        System.out.println("Department: " + dept);
+//        System.out.println("Department: " + dept);
 
         ApiResponse apiResponse = new ApiResponse(employee, dept);
         responses.add(apiResponse);
@@ -246,7 +246,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Department dept =
             restTemplate.getForObject(
                 "http://Department-Service/api/dept/getDept/" + deptId, Department.class);
-        System.out.println("Department: " + dept);
+//        System.out.println("Department: " + dept);
 
         ApiResponse apiResponse = new ApiResponse(employee, dept);
         responses.add(apiResponse);
